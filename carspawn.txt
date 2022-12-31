@@ -1,0 +1,56 @@
+{$CLEO .cs}
+ 
+ 0000: NOP
+ 0004: $41 = 400
+:WACHT
+0001: wait 90
+0A90: is_hid_pressed 15
+004D: jump_if_false @WACHT 
+0A90: is_hid_pressed 12
+004D: jump_if_false @WACHT
+0002: jump @START
+
+:TRST
+0249: release_model 5@
+0249: release_model $41 
+01C3: remove_references_to_car 5@
+00A6: destroy_car 5@ 
+
+:START
+0001: wait 90 
+0247: load_model $41   
+0001: wait 0  
+04C4: store_coords_to 1@ 2@ 3@  from_actor $PLAYER_ACTOR with_offset 0.0 5.0 -0.33
+:CAR
+0001: wait 90
+0248:   model $41 available
+004D: jump_if_false @START
+00A5: 5@ = create_car $41 at 1@ 2@ 3@
+
+:ACTION0
+0001: wait 0
+03E5: show_text_box 'TEXT1'
+0A90: is_hid_pressed 63
+004D: jump_if_false @VOL1 
+0002: jump @NEXT
+:VOL1  
+0A90: is_hid_pressed 12
+004D: jump_if_false @VOL2 
+0002: jump @ENDE
+:VOL2  
+0002: jump @ACTION0
+
+:NEXT 
+0001: wait 0
+000A: $41 += 1
+0039: $41 == 612 
+004D: jump_if_false @WHY
+0039: $41 == 400 
+:WHY
+0002: jump @TRST  
+   
+:ENDE  
+0001: wait 0
+01C3: remove_references_to_car 5@ 
+0002: jump @WACHT
+
