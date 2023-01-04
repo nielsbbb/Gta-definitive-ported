@@ -1,6 +1,6 @@
 {$CLEO .cs}
 
- 0000: NOP
+0000: NOP
 0247: load_model 346 
 0247: load_model 347
 0247: load_model 348 
@@ -22,9 +22,10 @@
 
 :WACHT
 0001: wait 90
-wait 10 
 0A90: is_hid_pressed 15
 004D: jump_if_false @WACHT 
+0A90: is_hid_pressed 16
+004D: jump_if_false @WACHT
 0002: jump @START
 
 :START
@@ -36,9 +37,9 @@ wait 10
 :ADD
 034F: destroy_actor_with_fade $10 
 0164: disable_marker $11
-0001: wait 90
+0001: wait 50
 :ADD2
-0001: wait 500
+0001: wait 50
 0164: disable_marker $11
 0247: load_model 0@ 
 038B: load_requested_models
@@ -48,8 +49,8 @@ wait 10
 
 :ACTION0
 0001: wait 0
-00BB: show_text_lowpriority GXT 'RNextDCloseUWea' time 30 flag 1  // ~s~This vehicle is not required for export.
-01E3: show_text_1number_styled GXT '~b~Ped ID ' number 0@ time 50 style 1 
+03E5: show_text_box 'TEXT'
+//01E3: show_text_1number_styled GXT '~b~Ped ID ' number 0@ time 50 style 1 
 0A90: is_hid_pressed 13
 004D: jump_if_false @VOL
 0002: jump @WEPUP
@@ -67,7 +68,8 @@ wait 10
 0002: jump @JOIN 
 
 
-:NEXT
+:NEXT 
+0001: wait 0
 000A: 0@ += 1
 0039: 0@ == 8 
 004D: jump_if_false @WHY
@@ -81,10 +83,18 @@ wait 10
 004D: jump_if_false @WHY2
 0002: jump @FAILSAVE2 
 :WHY2
+0039: 0@ == 74
+004D: jump_if_false @WHY10
+0002: jump @FAILSAVE9
+:WHY10  
 0039: 0@ == 86
 004D: jump_if_false @WHY3
 0002: jump @FAILSAVE3 
 :WHY3
+0039: 0@ == 119
+004D: jump_if_false @WHY8
+0002: jump @FAILSAVE10 
+:WHY8
 0039: 0@ == 149
 004D: jump_if_false @WHY4
 0002: jump @FAILSAVE4 
@@ -97,7 +107,7 @@ wait 10
 004D: jump_if_false @WHY6
 0002: jump @FAILSAVE6 
 :WHY6
-0039: 0@ == 289
+0039: 0@ == 288
 004D: jump_if_false @WHY7
 0002: jump @FAILSAVE7 
 :WHY7
@@ -135,8 +145,17 @@ wait 10
 0006: 0@ = 7
 0002: jump @ADD
 
+:FAILSAVE9
+0006: 0@ = 75
+0002: jump @ADD
+
+:FAILSAVE10
+0006: 0@ = 120
+0002: jump @ADD
+
 :JOIN
-0001: wait 0
+0001: wait 0 
+0164: disable_marker $11 
 07AF: $PLAYER_GROUP = player $PLAYER_CHAR group 
 0940: set_group $PLAYER_GROUP enters_leaders_vehicle 1 
 0850: AS_actor  $10 follow_actor $PLAYER_ACTOR 
@@ -145,8 +164,7 @@ wait 10
 0223: set_actor $10 health_to 500
 02E2: set_actor $10 weapon_accuracy_to 75
 060F: set_actor $10 melee_accuracy_to 75.0
-0164: disable_marker $11  
-0002: goto @ADD2   
+ 0002: goto @ADD2   
 
 :WEPUP
 0001: wait 10 
@@ -169,7 +187,7 @@ wait 10
 0002: jump @JOIN
 
 :WEPUP1
-wait 10
+wait 100
 000A: 1@ += 1
 0039: 1@ == 38 
 004D: jump_if_false @WHY9
