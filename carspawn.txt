@@ -1,7 +1,7 @@
 {$CLEO .cs}
  
 0000: NOP
-0006: 23@ = 417
+0006: 23@ = 400
 
 :WACHT
 0001: wait 90
@@ -11,22 +11,20 @@
 004D: jump_if_false @WACHT
 0002: jump @START
 
-:TRST
-0249: release_model 5@
-0249: release_model 23@ 
-01C3: remove_references_to_car 5@
-00A6: destroy_car 5@ 
-
 :START
+00A6: destroy_car 5@ 
 0001: wait 90 
-0247: load_model 23@   
-0001: wait 0  
+0247: load_model 23@ 
+038B: load_requested_models 
+0001: wait 0
+  
 04C4: store_coords_to 1@ 2@ 3@  from_actor $PLAYER_ACTOR with_offset 0.0 5.0 -0.33
 :CAR
 0001: wait 90
 0248:   model 23@ available
 004D: jump_if_false @START
 00A5: 5@ = create_car 23@ at 1@ 2@ 3@
+0249: release_model 23@ 
 
 :ACTION0
 0001: wait 0
@@ -43,16 +41,16 @@
 
 :NEXT 
 0001: wait 0
-000A: 23@ += 1
-0039: 23@ == 445 
+000B: 23@ += 1
+0039: 23@ == 611 
 004D: jump_if_false @WHY
 0002: jump @FAILED
 :WHY
-0002: jump @TRST  
+0002: jump @START  
 
 :FAILED
-0004: 23@ = 400 
-0002: jump @TRST 
+0006: 23@ = 400 
+0002: jump @START 
 
 :ENDE  
 0001: wait 0
